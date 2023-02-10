@@ -29,7 +29,7 @@ router.post("/signup", (req, res) => {
       });
 
       newUser.save().then((newDoc) => {
-        res.json({ result: true, user: newDoc.email });
+        res.json({ result: true, token: newDoc.token });
       });
     } else {
       res.json({ result: false, error: "User already exists" });
