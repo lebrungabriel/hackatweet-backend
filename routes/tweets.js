@@ -3,10 +3,10 @@ var router = express.Router();
 
 const User = require("../models/users");
 const Tweet = require("../models/tweet");
+const { response } = require("express");
 
 router.post("/post/:token", (req, res) => {
-  User.findOne({ token: req.params.token })
-  .then((data) => {
+  User.findOne({ token: req.params.token }).then((data) => {
     if (data) {
       const newTweet = new Tweet({
         content: req.body.content,
@@ -21,6 +21,16 @@ router.post("/post/:token", (req, res) => {
     }
   });
 });
+
+// router.delete("/delete/:token", (req, res) => {
+//   Tweet.deleteOne({ token: req.params.token }).then((deletedDoc) => {
+//     if (deletedDoc.deletedCount > 0) {
+//       res.json({ result: true, message: "Tweet deleted" });
+//     } else {
+//       res.json({ result: false, message: "Tweet not deleted" });
+//     }
+//   });
+// });
 
 router.get("/", (req, res) => {
   Tweet.find({})
