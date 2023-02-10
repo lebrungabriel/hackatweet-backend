@@ -17,25 +17,34 @@ router.post("/post/:token", (req, res) => {
         res.json({ result: true, tweet: newDoc });
       });
     } else {
-      res.json({ result: false, error: "Tweet didn't save" });
+      res.json({ result: false, error: "Tweet didn't saved" });
     }
   });
 });
 
-// router.delete("/delete/:token", (req, res) => {
-//   Tweet.deleteOne({ token: req.params.token }).then((deletedDoc) => {
-//     if (deletedDoc.deletedCount > 0) {
-//       res.json({ result: true, message: "Tweet deleted" });
-//     } else {
-//       res.json({ result: false, message: "Tweet not deleted" });
-//     }
-//   });
-// });
+router.get("/:id/:token", (req, res) => {
+  console.log("ID : " + req.params.id);
+  console.log("TOKEN : " + req.params.token);
+  Tweet.findById(req.params.id)
+    .populate("author")
+    .then((data) => {
+      if (req.params.token === data.author.token) {
+        Tweet.deleteOne(data).then((deletedDoc) => {
+          if (deletedDoc.deletedCount > 0) {
+            res.json({ result: true, message: "Tweet deleted" });
+          } else {
+            res.json({ result: false, message: "Tweet not deleted" });
+          }
+        });
+      }
+    });
+});
 
 router.get("/", (req, res) => {
   Tweet.find({})
     .populate("author")
     .then((data) => {
+      console.log(data);
       if (data) {
         res.json({ result: true, tweets: data });
       } else {
