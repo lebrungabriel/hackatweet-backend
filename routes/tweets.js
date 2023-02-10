@@ -4,8 +4,9 @@ var router = express.Router();
 const User = require("../models/users");
 const Tweet = require("../models/tweet");
 
-router.post("/post", (req, res) => {
-  User.findOne({ token: req.body.token }).then((data) => {
+router.post("/post/:token", (req, res) => {
+  User.findOne({ token: req.params.token })
+  .then((data) => {
     if (data) {
       const newTweet = new Tweet({
         content: req.body.content,
