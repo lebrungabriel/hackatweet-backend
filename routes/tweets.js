@@ -22,13 +22,15 @@ router.post("/post", (req, res) => {
 });
 
 router.get("/", (req, res) => {
-  Tweet.find({}).then((data) => {
-    if (data) {
-      res.json({ result: true, tweets: data });
-    } else {
-      res.json({ result: false, error: "No tweets found" });
-    }
-  });
+  Tweet.find({})
+    .populate("author")
+    .then((data) => {
+      if (data) {
+        res.json({ result: true, tweets: data });
+      } else {
+        res.json({ result: false, error: "No tweets found" });
+      }
+    });
 });
 
 module.exports = router;
